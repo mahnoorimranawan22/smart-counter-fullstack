@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Counter</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="container">
+
+        <div class="counter-card">
+
+            <!-- =====================================
+                 HEADER
+            ====================================== -->
+
+            <h1>🚀 Smart Counter</h1>
+
+            <p class="description">
+                Track values with custom steps, dark mode,
+                history, keyboard shortcuts, and local storage.
+            </p>
+
+
+            <!-- =====================================
+                 COUNTER
+            ====================================== -->
+
+            <div class="counter-section">
+
+                <div id="counter" class="counter">
+                    10
+                </div>
+
+                <div id="message" class="message">
+                    Ready
+                </div>
+
+            </div>
+
+
+            <!-- =====================================
+                 STEP SELECTOR
+            ====================================== -->
+
+            <div class="step-container">
+
+                <label for="step">
+                    Counter Step:
+                </label>
+
+                <select id="step">
+
+                    <option value="1">
+                        +1 / -1
+                    </option>
+
+                    <option value="2">
+                        +2 / -2
+                    </option>
+
+                    <option value="5">
+                        +5 / -5
+                    </option>
+
+                    <option value="10">
+                        +10 / -10
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- =====================================
+                 COUNTER BUTTONS
+            ====================================== -->
+
+            <div class="buttons">
+
+                <button
+                    id="decrease"
+                    class="decrease-btn"
+                    type="button">
+                    ➖ Decrease
+                </button>
+
+                <button
+                    id="reset"
+                    class="reset-btn"
+                    type="button">
+                    🔄 Reset
+                </button>
+
+                <button
+                    id="increase"
+                    class="increase-btn"
+                    type="button">
+                    ➕ Increase
+                </button>
+
+            </div>
+
+
+            <!-- =====================================
+                 DARK MODE
+            ====================================== -->
+
+            <button
+                id="darkMode"
+                class="dark-mode-btn"
+                type="button">
+                🌙 Dark Mode
+            </button>
+
+
+            <!-- =====================================
+                 HISTORY
+            ====================================== -->
+
+            <section class="history-section">
+
+                <h3>
+                    📜 Counter History
+                </h3>
+
+                <div id="history">
+
+                    <p class="empty-history">
+                        No actions recorded yet.
+                    </p>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <!-- ==========================================
+         JAVASCRIPT
+    =========================================== -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

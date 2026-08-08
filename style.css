@@ -1,0 +1,500 @@
+/* =========================================
+   RESET
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   BODY
+========================================= */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+
+    background: #7662d1;
+    color: #24324a;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 30px;
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease;
+}
+
+
+/* =========================================
+   MAIN CONTAINER
+========================================= */
+
+.container {
+    width: 100%;
+    max-width: 550px;
+}
+
+
+/* =========================================
+   COUNTER CARD
+========================================= */
+
+.counter-card {
+    background: #ffffff;
+
+    width: 100%;
+
+    padding: 40px 30px;
+
+    border-radius: 30px;
+
+    box-shadow:
+        0 20px 45px rgba(0, 0, 0, 0.15);
+
+    text-align: center;
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+/* =========================================
+   TITLE
+========================================= */
+
+h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+
+    color: #24324a;
+}
+
+
+/* =========================================
+   DESCRIPTION
+========================================= */
+
+.description {
+    color: #71809b;
+
+    font-size: 17px;
+    line-height: 1.6;
+
+    margin-bottom: 45px;
+}
+
+
+/* =========================================
+   COUNTER
+========================================= */
+
+.counter-section {
+    margin-bottom: 35px;
+}
+
+.counter {
+    font-size: 100px;
+
+    font-weight: 700;
+
+    line-height: 1;
+
+    color: #293548;
+
+    margin-bottom: 15px;
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.message {
+    min-height: 25px;
+
+    font-size: 18px;
+
+    color: #ff3333;
+}
+
+
+/* =========================================
+   STEP SELECTOR
+========================================= */
+
+.step-container {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+}
+
+.step-container label {
+    font-size: 18px;
+
+    font-weight: 600;
+}
+
+#step {
+    padding: 12px 18px;
+
+    font-size: 16px;
+
+    border: 1px solid #dce2ec;
+
+    border-radius: 10px;
+
+    background: white;
+
+    color: #24324a;
+
+    cursor: pointer;
+
+    outline: none;
+}
+
+
+/* =========================================
+   BUTTON CONTAINER
+========================================= */
+
+.buttons {
+    display: flex;
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+}
+
+
+/* =========================================
+   GENERAL BUTTON
+========================================= */
+
+button {
+    border: none;
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    border-radius: 16px;
+
+    padding: 17px 20px;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 7px 15px rgba(0, 0, 0, 0.12);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================
+   DECREASE BUTTON
+========================================= */
+
+.decrease-btn {
+    flex: 1;
+
+    background: #ed5367;
+
+    color: white;
+}
+
+
+/* =========================================
+   RESET BUTTON
+========================================= */
+
+.reset-btn {
+    flex: 1;
+
+    background: #ffa500;
+
+    color: white;
+}
+
+
+/* =========================================
+   INCREASE BUTTON
+========================================= */
+
+.increase-btn {
+    flex: 1;
+
+    background: #28cf76;
+
+    color: white;
+}
+
+
+/* =========================================
+   DARK MODE BUTTON
+========================================= */
+
+.dark-mode-btn {
+    width: 100%;
+
+    background: #303746;
+
+    color: white;
+
+    margin-bottom: 25px;
+}
+
+
+/* =========================================
+   HISTORY SECTION
+========================================= */
+
+.history-section {
+    border-top: 1px solid #e1e5ec;
+
+    padding-top: 25px;
+}
+
+.history-section h3 {
+    font-size: 21px;
+
+    margin-bottom: 25px;
+
+    color: #24324a;
+}
+
+
+/* =========================================
+   HISTORY
+========================================= */
+
+#history {
+    max-height: 220px;
+
+    overflow-y: auto;
+
+    text-align: left;
+}
+
+
+/* =========================================
+   EMPTY HISTORY
+========================================= */
+
+.empty-history {
+    text-align: center;
+
+    color: #8793a8;
+
+    font-style: italic;
+
+    padding: 10px;
+}
+
+
+/* =========================================
+   HISTORY ITEMS
+========================================= */
+
+.history-item {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 10px 12px;
+
+    margin-bottom: 8px;
+
+    border-radius: 10px;
+
+    background: #f4f6fa;
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   DARK MODE
+========================================= */
+
+body.dark-mode {
+    background: #171923;
+
+    color: #ffffff;
+}
+
+body.dark-mode .counter-card {
+    background: #252936;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 20px 45px rgba(0, 0, 0, 0.35);
+}
+
+body.dark-mode h1 {
+    color: #ffffff;
+}
+
+body.dark-mode .description {
+    color: #aeb7ca;
+}
+
+body.dark-mode .counter {
+    color: #ffffff;
+}
+
+body.dark-mode .step-container label {
+    color: #ffffff;
+}
+
+body.dark-mode #step {
+    background: #303442;
+
+    color: white;
+
+    border-color: #4b5265;
+}
+
+body.dark-mode .history-section {
+    border-top-color: #414657;
+}
+
+body.dark-mode .history-section h3 {
+    color: #ffffff;
+}
+
+body.dark-mode .empty-history {
+    color: #aeb7ca;
+}
+
+body.dark-mode .history-item {
+    background: #303442;
+
+    color: white;
+}
+
+
+/* =========================================
+   SCROLLBAR
+========================================= */
+
+#history::-webkit-scrollbar {
+    width: 7px;
+}
+
+#history::-webkit-scrollbar-thumb {
+    background: #a5aec0;
+
+    border-radius: 10px;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 15px;
+    }
+
+    .counter-card {
+        padding: 30px 20px;
+
+        border-radius: 24px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .description {
+        font-size: 15px;
+
+        margin-bottom: 35px;
+    }
+
+    .counter {
+        font-size: 80px;
+    }
+
+    .buttons {
+        gap: 8px;
+    }
+
+    button {
+        font-size: 15px;
+
+        padding: 15px 10px;
+    }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 400px) {
+
+    body {
+        padding: 10px;
+    }
+
+    .counter-card {
+        padding: 25px 15px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .description {
+        font-size: 14px;
+    }
+
+    .counter {
+        font-size: 70px;
+    }
+
+    .step-container {
+        flex-direction: column;
+
+        gap: 8px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+}
