@@ -28,18 +28,8 @@ The project demonstrates frontend development, JavaScript fundamentals, REST API
 - REST API
 - Local Storage
 
-## 📁 Project Structure
+## CHECK IT OUT
 
-```text
-Smart-Counter/
-│
-├── public/
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
-│
-├── .gitignore
-├── package.json
-├── package-lock.json
+https://smart-counter-lime.vercel.app/
 ├── server.js
 └── README.md
