@@ -1,2 +1,45 @@
-# smart-counter-fullstack
-A beginner full-stack JavaScript counter application built with HTML, CSS, JavaScript, Node.js and Express.
+# 🚀 Smart Counter
+
+A beginner-friendly full-stack JavaScript counter application built with HTML, CSS, JavaScript, Node.js, and Express.js.
+
+The project demonstrates frontend development, JavaScript fundamentals, REST API communication, Local Storage, and basic backend development.
+
+## ✨ Features
+
+- ➕ Increase counter
+- ➖ Decrease counter
+- 🔄 Reset counter
+- ⚙️ Custom counter steps
+- 🌙 Dark mode
+- 📜 Counter history
+- ⌨️ Keyboard shortcuts
+- 💾 Local Storage
+- 🔗 Frontend-to-backend API communication
+- 📡 GET and POST API requests
+- 📱 Responsive design
+
+## 🛠️ Technologies Used
+
+- HTML5
+- CSS3
+- JavaScript
+- Node.js
+- Express.js
+- REST API
+- Local Storage
+
+## 📁 Project Structure
+
+```text
+Smart-Counter/
+│
+├── public/
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
+│
+├── .gitignore
+├── package.json
+├── package-lock.json
+├── server.js
+└── README.md
