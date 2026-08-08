@@ -31,5 +31,4 @@ The project demonstrates frontend development, JavaScript fundamentals, REST API
 ## CHECK IT OUT
 
 https://smart-counter-lime.vercel.app/
-├── server.js
-└── README.md
+
