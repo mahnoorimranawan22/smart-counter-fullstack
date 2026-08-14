@@ -121,7 +121,7 @@ async function increase() {
     // Send updated counter to backend
     try {
 
-        const response = await fetch("/api/counter", {
+        const response = await fetch("api/counter", {
             method: "POST",
 
             headers: {
@@ -175,7 +175,7 @@ async function decrease() {
     // Send updated counter to backend
     try {
 
-        const response = await fetch("/api/counter", {
+        const response = await fetch("api/counter", {
             method: "POST",
 
             headers: {
@@ -220,7 +220,7 @@ async function resetCounter() {
     // Send reset value to backend
     try {
 
-        const response = await fetch("/api/counter", {
+        const response = await fetch("api/counter", {
             method: "POST",
 
             headers: {
@@ -320,7 +320,7 @@ async function loadCounterFromBackend() {
     try {
 
         const response =
-            await fetch("/api/counter");
+            await fetch("api/counter");
 
         const data =
             await response.json();
