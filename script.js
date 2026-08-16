@@ -1,14 +1,15 @@
 // ==========================================
-// SMART COUNTER
+// SMART COUNTER — UI LAYER
 // ==========================================
+// All counter state & logic lives in the
+// DOM-free counter-core.js module; this file
+// handles the DOM, animations, persistence,
+// backend sync, auto-tick and shortcuts.
 
-// Counter state
-let state = {
-    count: 10,
-    step: 1,
-    history: [],
-    darkMode: false
-};
+const { createCounter } = window.CounterCore;
+
+// Counter core (state + logic)
+const counter = createCounter();
 
 
 // ==========================================
@@ -23,6 +24,17 @@ const decreaseBtn = document.getElementById("decrease");
 const increaseBtn = document.getElementById("increase");
 const resetBtn = document.getElementById("reset");
 const darkModeBtn = document.getElementById("darkMode");
+const autoBtn = document.getElementById("auto");
+const autoSpeedSelect = document.getElementById("autoSpeed");
+const copyBtn = document.getElementById("copy");
+
+
+// ==========================================
+// AUTO-TICK STATE
+// ==========================================
+
+let autoInterval = null;
+let autoSpeedMs = 1000;
 
 
 // ==========================================
@@ -75,22 +87,22 @@ function animateCountTo(target) {
 
 function updateUI() {
 
+    const state = counter.getState();
+
     // Roll the displayed number to the new value (counts up on load)
     animateCountTo(state.count);
 
     // Counter message
     if (state.count === 0) {
         messageDisplay.textContent = "Minimum counter limit reached (0).";
+        messageDisplay.classList.add("message--limit");
     } else {
         messageDisplay.textContent = "Ready";
+        messageDisplay.classList.remove("message--limit");
     }
 
     // Disable decrease at 0
-    if (state.count <= 0) {
-        decreaseBtn.disabled = true;
-    } else {
-        decreaseBtn.disabled = false;
-    }
+    decreaseBtn.disabled = state.count <= 0;
 
     // Update step selector
     stepSelect.value = state.step;
@@ -106,6 +118,15 @@ function updateUI() {
         document.body.classList.remove("dark-mode");
         darkModeBtn.textContent = "🌙 Dark Mode";
     }
+
+    // Auto-tick button state
+    if (autoInterval) {
+        autoBtn.classList.add("auto-btn--active");
+        autoBtn.textContent = "⏸ Pause";
+    } else {
+        autoBtn.classList.remove("auto-btn--active");
+        autoBtn.textContent = "▶ Auto-tick";
+    }
 }
 
 
@@ -114,6 +135,8 @@ function updateUI() {
 // ==========================================
 
 function updateHistory() {
+
+    const state = counter.getState();
 
     if (state.history.length === 0) {
         historyList.innerHTML = `
@@ -128,24 +151,6 @@ function updateHistory() {
     historyList.innerHTML = state.history
         .map(item => `<p class="history-item">${item}</p>`)
         .join("");
-}
-
-
-// ==========================================
-// ADD HISTORY
-// ==========================================
-
-function addHistory(action) {
-
-    state.history.unshift(action);
-
-    // Keep only latest 10 actions
-    if (state.history.length > 10) {
-        state.history.pop();
-    }
-
-    saveState();
-    updateHistory();
 
     // Slide-in highlight for the newest entry
     const firstItem = historyList.firstElementChild;
@@ -168,202 +173,16 @@ function bumpCounter() {
 
 
 // ==========================================
-// INCREASE
-// ==========================================
-
-async function increase() {
-
-    state.count += state.step;
-
-    addHistory(`➕ Increased by ${state.step} → ${state.count}`);
-
-    updateUI();
-    bumpCounter();
-    saveState();
-
-
-    // Send updated counter to backend
-    try {
-
-        const response = await fetch("api/counter", {
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-                count: state.count
-            })
-        });
-
-
-        const data = await response.json();
-
-        console.log("Backend response:", data);
-
-
-    } catch (error) {
-
-        console.error(
-            "Error sending counter to backend:",
-            error
-        );
-    }
-}
-
-
-// ==========================================
-// DECREASE
-// ==========================================
-
-async function decrease() {
-
-    if (state.count <= 0) {
-        return;
-    }
-
-    state.count -= state.step;
-
-    // Prevent negative values
-    if (state.count < 0) {
-        state.count = 0;
-    }
-
-    addHistory(`➖ Decreased by ${state.step} → ${state.count}`);
-
-    updateUI();
-    bumpCounter();
-    saveState();
-
-
-    // Send updated counter to backend
-    try {
-
-        const response = await fetch("api/counter", {
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-                count: state.count
-            })
-        });
-
-
-        const data = await response.json();
-
-        console.log("Backend response:", data);
-
-
-    } catch (error) {
-
-        console.error(
-            "Error sending counter to backend:",
-            error
-        );
-    }
-}
-
-
-// ==========================================
-// RESET
-// ==========================================
-
-async function resetCounter() {
-
-    state.count = 0;
-
-    addHistory("🔄 Counter reset → 0");
-
-    updateUI();
-    bumpCounter();
-    saveState();
-
-
-    // Send reset value to backend
-    try {
-
-        const response = await fetch("api/counter", {
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-                count: 0
-            })
-        });
-
-
-        const data = await response.json();
-
-        console.log("Backend response:", data);
-
-
-    } catch (error) {
-
-        console.error(
-            "Error sending reset to backend:",
-            error
-        );
-    }
-}
-
-
-// ==========================================
-// CHANGE STEP
-// ==========================================
-
-function changeStep() {
-
-    state.step = Number(stepSelect.value);
-
-    addHistory(`⚙️ Step changed → ${state.step}`);
-
-    updateUI();
-    saveState();
-}
-
-
-// ==========================================
-// DARK MODE
-// ==========================================
-
-function toggleDarkMode() {
-
-    state.darkMode = !state.darkMode;
-
-    addHistory(
-        state.darkMode
-            ? "🌙 Dark mode enabled"
-            : "☀️ Light mode enabled"
-    );
-
-    updateUI();
-    saveState();
-}
-
-
-// ==========================================
-// LOCAL STORAGE
+// PERSISTENCE & BACKEND
 // ==========================================
 
 function saveState() {
 
     localStorage.setItem(
         "smartCounterState",
-        JSON.stringify(state)
+        JSON.stringify(counter.getState())
     );
 }
-
-
-// ==========================================
-// LOAD LOCAL STORAGE
-// ==========================================
 
 function loadState() {
 
@@ -372,14 +191,43 @@ function loadState() {
 
     if (savedState) {
 
-        state = JSON.parse(savedState);
+        try {
+
+            counter.load(JSON.parse(savedState));
+
+        } catch (e) {
+
+            console.error("Could not parse saved state:", e);
+        }
     }
 }
 
+async function syncBackend(count) {
 
-// ==========================================
-// LOAD COUNTER FROM BACKEND
-// ==========================================
+    try {
+
+        const response = await fetch("api/counter", {
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({ count })
+        });
+
+        const data = await response.json();
+
+        console.log("Backend response:", data);
+
+    } catch (error) {
+
+        console.error(
+            "Error sending counter to backend:",
+            error
+        );
+    }
+}
 
 async function loadCounterFromBackend() {
 
@@ -398,7 +246,7 @@ async function loadCounterFromBackend() {
 
         if (typeof data.count === "number") {
 
-            state.count = data.count;
+            counter.load({ count: data.count });
 
             updateUI();
             saveState();
@@ -410,6 +258,169 @@ async function loadCounterFromBackend() {
             "Could not connect to backend:",
             error
         );
+    }
+}
+
+
+// ==========================================
+// MANUAL ACTIONS
+// ==========================================
+
+function increase() {
+
+    const state = counter.increase();
+
+    updateUI();
+    bumpCounter();
+    saveState();
+    syncBackend(state.count);
+}
+
+function decrease() {
+
+    const state = counter.decrease();
+
+    updateUI();
+    bumpCounter();
+    saveState();
+    syncBackend(state.count);
+}
+
+function resetCounter() {
+
+    const state = counter.reset();
+
+    updateUI();
+    bumpCounter();
+    saveState();
+    syncBackend(state.count);
+}
+
+function changeStep() {
+
+    const state = counter.setStep(Number(stepSelect.value));
+
+    updateUI();
+    saveState();
+}
+
+function toggleDarkMode() {
+
+    const state = counter.toggleDarkMode();
+
+    updateUI();
+    saveState();
+}
+
+
+// ==========================================
+// AUTO-TICK
+// ==========================================
+
+function autoTickOnce() {
+
+    counter.tick();
+
+    updateUI();
+    saveState();
+}
+
+function startAutoTick() {
+
+    if (autoInterval) return;
+
+    autoInterval = setInterval(autoTickOnce, autoSpeedMs);
+
+    updateUI();
+}
+
+function stopAutoTick() {
+
+    if (autoInterval) {
+
+        clearInterval(autoInterval);
+        autoInterval = null;
+
+        updateUI();
+    }
+}
+
+function toggleAutoTick() {
+
+    if (autoInterval) {
+        stopAutoTick();
+    } else {
+        startAutoTick();
+    }
+}
+
+function changeAutoSpeed() {
+
+    autoSpeedMs = Number(autoSpeedSelect.value) || 1000;
+
+    // Restart the interval with the new speed
+    if (autoInterval) {
+
+        clearInterval(autoInterval);
+        autoInterval = setInterval(autoTickOnce, autoSpeedMs);
+    }
+}
+
+
+// ==========================================
+// COPY VALUE
+// ==========================================
+
+let copyResetTimer = null;
+
+function fallbackCopy(text, done) {
+
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    try {
+        document.execCommand("copy");
+    } catch (e) {
+        /* clipboard unavailable */
+    }
+
+    document.body.removeChild(textarea);
+    done();
+}
+
+function copyCount() {
+
+    const value = String(counter.getState().count);
+
+    const done = () => {
+
+        copyBtn.textContent = "✓ Copied";
+        copyBtn.classList.add("copy-btn--copied");
+
+        clearTimeout(copyResetTimer);
+        copyResetTimer = setTimeout(() => {
+
+            copyBtn.textContent = "Copy";
+            copyBtn.classList.remove("copy-btn--copied");
+
+        }, 1500);
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+
+        navigator.clipboard
+            .writeText(value)
+            .then(done)
+            .catch(() => fallbackCopy(value, done));
+
+    } else {
+
+        fallbackCopy(value, done);
     }
 }
 
@@ -439,6 +450,16 @@ document.addEventListener("keydown", (event) => {
     if (event.key.toLowerCase() === "d") {
         toggleDarkMode();
     }
+
+    // A = Auto-tick
+    if (event.key.toLowerCase() === "a") {
+        toggleAutoTick();
+    }
+
+    // C = Copy value
+    if (event.key.toLowerCase() === "c") {
+        copyCount();
+    }
 });
 
 
@@ -446,30 +467,21 @@ document.addEventListener("keydown", (event) => {
 // EVENT LISTENERS
 // ==========================================
 
-increaseBtn.addEventListener(
-    "click",
-    increase
-);
+increaseBtn.addEventListener("click", increase);
 
-decreaseBtn.addEventListener(
-    "click",
-    decrease
-);
+decreaseBtn.addEventListener("click", decrease);
 
-resetBtn.addEventListener(
-    "click",
-    resetCounter
-);
+resetBtn.addEventListener("click", resetCounter);
 
-darkModeBtn.addEventListener(
-    "click",
-    toggleDarkMode
-);
+darkModeBtn.addEventListener("click", toggleDarkMode);
 
-stepSelect.addEventListener(
-    "change",
-    changeStep
-);
+stepSelect.addEventListener("change", changeStep);
+
+autoBtn.addEventListener("click", toggleAutoTick);
+
+autoSpeedSelect.addEventListener("change", changeAutoSpeed);
+
+copyBtn.addEventListener("click", copyCount);
 
 
 // ==========================================

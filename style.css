@@ -148,6 +148,9 @@ body {
    COUNTER CARD
 ------------------------------------------------------------ */
 .counter-card {
+    position: relative;
+    overflow: hidden;
+
     background: var(--card-light);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
@@ -166,6 +169,18 @@ body {
     animation: fade-up 0.7s var(--ease-out) backwards;
 
     transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, transform 0.3s var(--ease-out);
+}
+
+/* Gradient accent line across the top of the card */
+.counter-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    opacity: 0.9;
 }
 
 .counter-card:hover {
@@ -233,17 +248,91 @@ h1 {
 }
 
 /* ------------------------------------------------------------
-   MESSAGE
+   COUNTER ACTIONS (message + copy)
+------------------------------------------------------------ */
+.counter-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    min-height: 28px;
+
+    margin-top: 4px;
+}
+
+/* ------------------------------------------------------------
+   MESSAGE (status pill)
 ------------------------------------------------------------ */
 .message {
-    min-height: 24px;
+    display: inline-flex;
+    align-items: center;
 
-    font-size: 15px;
-    font-weight: 600;
+    gap: 7px;
+
+    padding: 5px 12px;
+
+    border: 1px solid rgba(20, 184, 166, 0.25);
+    border-radius: 999px;
+
+    background: rgba(20, 184, 166, 0.08);
+
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
 
     color: var(--accent-teal);
 
-    transition: color 0.4s ease;
+    transition: color 0.4s ease, border-color 0.4s ease, background 0.4s ease;
+}
+
+.message::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+}
+
+.message--limit {
+    color: var(--warning);
+    border-color: rgba(251, 191, 36, 0.3);
+    background: rgba(251, 191, 36, 0.08);
+}
+
+/* ------------------------------------------------------------
+   COPY BUTTON
+------------------------------------------------------------ */
+.copy-btn {
+    padding: 6px 14px;
+
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+
+    border-radius: 999px;
+
+    background: rgba(14, 165, 233, 0.08);
+    border: 1px solid var(--border-light);
+
+    color: var(--text-dark-muted);
+
+    transition: all 0.25s ease;
+}
+
+.copy-btn:hover {
+    border-color: var(--accent-cyan);
+    color: var(--accent-teal);
+    background: rgba(34, 211, 238, 0.10);
+}
+
+.copy-btn--copied {
+    border-color: var(--accent-teal);
+    color: var(--accent-teal);
+    background: rgba(20, 184, 166, 0.12);
 }
 
 /* ------------------------------------------------------------
@@ -267,8 +356,10 @@ h1 {
     transition: color 0.4s ease;
 }
 
-#step {
+#step,
+#autoSpeed {
     padding: 11px 16px;
+    padding-right: 38px;
 
     font-size: 15px;
     font-weight: 600;
@@ -276,7 +367,9 @@ h1 {
     border: 1px solid var(--border-light);
     border-radius: 12px;
 
-    background: rgba(255, 255, 255, 0.9);
+    background:
+        url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%230e2a38' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center,
+        rgba(255, 255, 255, 0.9);
 
     color: var(--text-dark);
 
@@ -284,11 +377,16 @@ h1 {
 
     outline: none;
 
+    appearance: none;
+    -webkit-appearance: none;
+
     transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.4s ease, color 0.4s ease;
 }
 
 #step:hover,
-#step:focus {
+#step:focus,
+#autoSpeed:hover,
+#autoSpeed:focus {
     border-color: var(--accent-cyan);
     box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
 }
@@ -329,6 +427,13 @@ button:hover {
 
 button:active {
     transform: translateY(0) scale(0.96);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.18) !important;
+}
+
+button:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--accent-cyan);
+    outline-offset: 2px;
 }
 
 button:disabled {
@@ -403,6 +508,66 @@ button:disabled {
 .dark-mode-btn:hover {
     background: #0b2136;
     box-shadow: 0 10px 24px -10px rgba(8, 19, 34, 0.6), 0 0 16px -6px var(--glow-cyan);
+}
+
+/* ------------------------------------------------------------
+   AUTO-TICK
+------------------------------------------------------------ */
+.auto-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+}
+
+.auto-btn {
+    flex: 1;
+
+    background: rgba(8, 19, 34, 0.9);
+    color: var(--text-light);
+
+    box-shadow: 0 8px 20px -10px rgba(8, 19, 34, 0.5);
+}
+
+.auto-btn:hover {
+    background: #0b2136;
+    box-shadow: 0 10px 24px -10px rgba(8, 19, 34, 0.6), 0 0 16px -6px var(--glow-cyan);
+}
+
+/* Active (ticking) state with pulsing indicator dot */
+.auto-btn--active {
+    position: relative;
+
+    background-image: var(--gradient-primary);
+    color: #042c3c;
+
+    box-shadow: 0 8px 20px -8px var(--glow-cyan);
+}
+
+.auto-btn--active:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 10px 24px -8px var(--glow-cyan), 0 0 18px -4px rgba(34, 211, 238, 0.4);
+}
+
+.auto-btn--active::after {
+    content: "";
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #042c3c;
+    animation: pulse-dot 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: translateY(-50%) scale(1); }
+    50%      { opacity: 0.35; transform: translateY(-50%) scale(0.7); }
 }
 
 /* ------------------------------------------------------------
@@ -523,16 +688,59 @@ body.dark-mode .step-container label {
     color: var(--text-light);
 }
 
-body.dark-mode #step {
-    background: var(--bg-midnight);
+body.dark-mode #step,
+body.dark-mode #autoSpeed {
+    background:
+        url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2322d3ee' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center,
+        var(--bg-midnight);
+
     color: var(--text-light);
     border-color: var(--border-soft);
 }
 
 body.dark-mode #step:hover,
-body.dark-mode #step:focus {
+body.dark-mode #step:focus,
+body.dark-mode #autoSpeed:hover,
+body.dark-mode #autoSpeed:focus {
     border-color: var(--accent-cyan);
     box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.18);
+}
+
+body.dark-mode .auto-btn {
+    background: rgba(16, 36, 60, 0.7);
+    border: 1px solid var(--border-soft);
+}
+
+body.dark-mode .auto-btn:hover {
+    background: rgba(16, 36, 60, 1);
+}
+
+body.dark-mode .message {
+    color: var(--accent-cyan);
+    border-color: rgba(34, 211, 238, 0.25);
+    background: rgba(34, 211, 238, 0.07);
+}
+
+body.dark-mode .message--limit {
+    color: var(--warning);
+    border-color: rgba(251, 191, 36, 0.3);
+    background: rgba(251, 191, 36, 0.07);
+}
+
+body.dark-mode .copy-btn {
+    color: var(--text-muted);
+    border-color: var(--border-soft);
+    background: rgba(16, 36, 60, 0.5);
+}
+
+body.dark-mode .copy-btn:hover {
+    color: var(--accent-cyan);
+    border-color: var(--accent-cyan);
+}
+
+body.dark-mode .copy-btn--copied {
+    color: var(--accent-aqua);
+    border-color: var(--accent-aqua);
 }
 
 body.dark-mode .dark-mode-btn {
@@ -661,6 +869,14 @@ body.dark-mode .history-item:hover {
         gap: 8px;
     }
 
+    .auto-row {
+        flex-direction: column;
+    }
+
+    .auto-btn {
+        width: 100%;
+    }
+
     .buttons {
         flex-direction: column;
     }
@@ -677,7 +893,8 @@ body.dark-mode .history-item:hover {
     .aurora-blob,
     .counter-card,
     .history-item-new,
-    .counter.bump {
+    .counter.bump,
+    .auto-btn--active::after {
         animation: none !important;
     }
 

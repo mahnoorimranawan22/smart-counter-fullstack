@@ -36,7 +36,7 @@
             <h1>🚀 Smart Counter</h1>
 
             <p class="description">
-                Track values with custom steps, dark mode,
+                Track values with custom steps, auto-tick, dark mode,
                 history, keyboard shortcuts, and local storage.
             </p>
 
@@ -51,8 +51,20 @@
                     10
                 </div>
 
-                <div id="message" class="message">
-                    Ready
+                <div class="counter-actions">
+
+                    <div id="message" class="message">
+                        Ready
+                    </div>
+
+                    <button
+                        id="copy"
+                        class="copy-btn"
+                        type="button"
+                        title="Copy current value">
+                        Copy
+                    </button>
+
                 </div>
 
             </div>
@@ -84,6 +96,38 @@
 
                     <option value="10">
                         +10 / -10
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- =====================================
+                 AUTO-TICK
+            ====================================== -->
+
+            <div class="auto-row">
+
+                <button
+                    id="auto"
+                    class="auto-btn"
+                    type="button">
+                    ▶ Auto-tick
+                </button>
+
+                <select id="autoSpeed" aria-label="Auto-tick speed">
+
+                    <option value="1000" selected>
+                        Every 1s
+                    </option>
+
+                    <option value="2000">
+                        Every 2s
+                    </option>
+
+                    <option value="5000">
+                        Every 5s
                     </option>
 
                 </select>
@@ -162,6 +206,7 @@
          JAVASCRIPT
     =========================================== -->
 
+    <script src="counter-core.js"></script>
     <script src="script.js"></script>
 
 </body>

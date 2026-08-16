@@ -10,13 +10,27 @@ The project demonstrates frontend development, JavaScript fundamentals, REST API
 - ➖ Decrease counter
 - 🔄 Reset counter
 - ⚙️ Custom counter steps
+- ▶️ Auto-tick mode (1s / 2s / 5s) with pause
+- 📋 Copy current value
 - 🌙 Dark mode
 - 📜 Counter history
 - ⌨️ Keyboard shortcuts
 - 💾 Local Storage
 - 🔗 Frontend-to-backend API communication
 - 📡 GET and POST API requests
+- 🧪 Unit tests
 - 📱 Responsive design
+
+## 🧪 Testing
+
+Run the unit tests (Node's built-in test runner, no extra dependencies):
+
+```bash
+npm test
+```
+
+The tests cover the counter core logic: increase/decrease/reset, custom steps,
+negative clamping, history limits, auto-tick, and state persistence.
 
 ## 🛠️ Technologies Used
 
@@ -27,6 +41,7 @@ The project demonstrates frontend development, JavaScript fundamentals, REST API
 - Express.js
 - REST API
 - Local Storage
+- Node's built-in test runner
 
 ## CHECK IT OUT
 
