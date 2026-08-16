@@ -9,6 +9,8 @@
 
     <title>Smart Counter</title>
 
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800|Space+Grotesk:500,600,700|Orbitron:500,600,700"
         rel="stylesheet">
@@ -23,6 +25,18 @@
         <span class="aurora-blob aurora-blob--cyan"></span>
         <span class="aurora-blob aurora-blob--teal"></span>
         <span class="aurora-blob aurora-blob--sky"></span>
+    </div>
+
+    <!-- Unsplash Hero Background -->
+    <div class="hero-image" aria-hidden="true">
+        <img id="heroImage"
+            src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=1400&q=70"
+            srcset="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=800&q=70 800w,
+                    https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=1400&q=70 1400w,
+                    https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=2000&q=70 2000w"
+            sizes="100vw"
+            alt="">
+        <div class="hero-image-overlay"></div>
     </div>
 
     <main class="container">
@@ -188,15 +202,30 @@
 
 
             <!-- =====================================
-                 DARK MODE
+                 SETTINGS (dark mode + background)
             ====================================== -->
 
-            <button
-                id="darkMode"
-                class="dark-mode-btn"
-                type="button">
-                🌙 Dark Mode
-            </button>
+            <div class="settings-row">
+
+                <button
+                    id="darkMode"
+                    class="dark-mode-btn"
+                    type="button">
+                    🌙 Dark Mode
+                </button>
+
+                <button
+                    id="bgToggle"
+                    class="bg-toggle-btn"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="bgPicker">
+                    🎨 Background
+                </button>
+
+            </div>
+
+            <div id="bgPicker" class="bg-picker" hidden></div>
 
 
             <!-- =====================================
@@ -232,6 +261,7 @@
                 <span class="shortcut-hint"><kbd>A</kbd> Auto</span>
                 <span class="shortcut-hint"><kbd>C</kbd> Copy</span>
                 <span class="shortcut-hint"><kbd>N</kbd> New</span>
+                <span class="shortcut-hint"><kbd>B</kbd> Bg</span>
                 <span class="shortcut-hint"><kbd>D</kbd> Dark</span>
 
             </div>

@@ -13,6 +13,10 @@ The project demonstrates frontend development, JavaScript fundamentals, REST API
 - ⚙️ Custom counter steps
 - ▶️ Auto-tick mode (1s / 2s / 5s) with pause
 - 🎯 Milestone progress bar (next hundred)
+- 🎊 Confetti celebration on milestones
+- 🖼️ Animated Unsplash hero background (light & dark mode)
+- 🎨 Background picker (6 images)
+- ✨ Animated gradient title & button sheen
 - 📋 Copy current value
 - 🌙 Dark mode
 - 📜 Counter history

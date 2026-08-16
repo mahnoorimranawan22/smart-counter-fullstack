@@ -12,8 +12,19 @@ const { createCounter } = window.CounterCore;
 
 const STORAGE_KEY = "smartCounterStateV2";
 const LEGACY_KEY = "smartCounterState";
+const BG_KEY = "smartCounterBackground";
 const MAX_COUNTERS = 8;
 const MILESTONE_DIVISOR = 100;
+
+// Background gallery (Unsplash)
+const BACKGROUNDS = [
+    { id: "ocean",  url: "https://images.unsplash.com/photo-1505118380757-91f5f5632de0", label: "Ocean" },
+    { id: "lagoon", url: "https://images.unsplash.com/photo-1518837695005-2083093ee35b", label: "Lagoon" },
+    { id: "wave",   url: "https://images.unsplash.com/photo-1439405326854-014607f694d7", label: "Wave" },
+    { id: "night",  url: "https://images.unsplash.com/photo-1519681393784-d120267933ba", label: "Night" },
+    { id: "forest", url: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05", label: "Forest" },
+    { id: "beach",  url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e", label: "Beach" }
+];
 
 
 // ==========================================
@@ -44,6 +55,9 @@ const tabList = document.getElementById("tabList");
 const milestoneLabel = document.getElementById("milestone-label");
 const milestonePct = document.getElementById("milestone-pct");
 const milestoneBar = document.getElementById("milestone-bar");
+const heroImage = document.getElementById("heroImage");
+const bgToggle = document.getElementById("bgToggle");
+const bgPicker = document.getElementById("bgPicker");
 
 function active() {
     return counters[activeIndex];
@@ -56,6 +70,7 @@ function active() {
 
 let displayCount = null;
 let countRaf = null;
+let lastMilestoneComplete = null;
 
 function animateCountTo(target) {
 
@@ -245,6 +260,12 @@ function updateUI() {
     milestoneBar.style.width = pct + "%";
     milestoneBar.classList.toggle("milestone-bar--full", milestone.complete);
 
+    // Confetti when a milestone is freshly reached (not on page load)
+    if (lastMilestoneComplete !== null && !lastMilestoneComplete && milestone.complete) {
+        burstConfetti();
+    }
+    lastMilestoneComplete = milestone.complete;
+
     // Disable decrease at 0
     decreaseBtn.disabled = state.count <= 0;
 
@@ -275,9 +296,12 @@ function updateHistory() {
 
     if (state.history.length === 0) {
         historyList.innerHTML = `
-            <p class="empty-history">
-                No actions recorded yet.
-            </p>
+            <div class="empty-history">
+                <img class="empty-history-img"
+                    src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=200&q=60"
+                    alt="">
+                <span>No actions recorded yet.</span>
+            </div>
         `;
 
         return;
@@ -291,6 +315,44 @@ function updateHistory() {
     const firstItem = historyList.firstElementChild;
     if (firstItem) {
         firstItem.classList.add("history-item-new");
+    }
+}
+
+
+// ==========================================
+// CONFETTI BURST
+// ==========================================
+
+function burstConfetti() {
+
+    const container = document.querySelector(".counter-card");
+    if (!container) return;
+
+    const rect = container.getBoundingClientRect();
+    const originX = rect.left + rect.width / 2;
+    const originY = rect.top + 70;
+
+    const colors = ["#22d3ee", "#2dd4bf", "#38bdf8", "#14b8a6", "#fbbf24"];
+
+    for (let i = 0; i < 26; i++) {
+
+        const piece = document.createElement("span");
+        piece.className = "confetti";
+
+        piece.style.left = originX + "px";
+        piece.style.top = originY + "px";
+        piece.style.background = colors[i % colors.length];
+
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 60 + Math.random() * 150;
+
+        piece.style.setProperty("--dx", Math.cos(angle) * distance + "px");
+        piece.style.setProperty("--dy", Math.sin(angle) * distance - 50 + "px");
+        piece.style.animationDuration = (0.8 + Math.random() * 0.6) + "s";
+
+        container.appendChild(piece);
+
+        setTimeout(() => piece.remove(), 1600);
     }
 }
 
@@ -561,6 +623,78 @@ function changeAutoSpeed() {
 
 
 // ==========================================
+// BACKGROUND PICKER
+// ==========================================
+
+function heroSrc(url, width) {
+    return url + "?auto=format&fit=crop&w=" + width + "&q=70";
+}
+
+function renderBgPicker() {
+
+    const selected = localStorage.getItem(BG_KEY) || BACKGROUNDS[0].url;
+
+    bgPicker.innerHTML = "";
+
+    BACKGROUNDS.forEach((bg) => {
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "bg-thumb" + (bg.url === selected ? " bg-thumb--selected" : "");
+        button.title = bg.label;
+        button.setAttribute("aria-label", "Use " + bg.label + " background");
+        button.dataset.url = bg.url;
+
+        const img = document.createElement("img");
+        img.src = heroSrc(bg.url, 240);
+        img.alt = "";
+        img.loading = "lazy";
+
+        button.appendChild(img);
+        bgPicker.appendChild(button);
+    });
+}
+
+function setHeroImage(url) {
+
+    // Crossfade: fade out, swap, fade back in on load
+    heroImage.style.opacity = "0";
+
+    heroImage.src = heroSrc(url, 1400);
+    heroImage.srcset =
+        heroSrc(url, 800) + " 800w, " +
+        heroSrc(url, 1400) + " 1400w, " +
+        heroSrc(url, 2000) + " 2000w";
+
+    heroImage.onload = () => {
+        heroImage.style.opacity = "1";
+    };
+
+    localStorage.setItem(BG_KEY, url);
+    renderBgPicker();
+}
+
+function toggleBgPicker() {
+
+    const isOpen = !bgPicker.hidden;
+
+    bgPicker.hidden = isOpen;
+    bgToggle.setAttribute("aria-expanded", String(!isOpen));
+}
+
+bgToggle.addEventListener("click", toggleBgPicker);
+
+bgPicker.addEventListener("click", (event) => {
+
+    const thumb = event.target.closest(".bg-thumb");
+    if (!thumb || !thumb.dataset.url) return;
+
+    setHeroImage(thumb.dataset.url);
+    toggleBgPicker();
+});
+
+
+// ==========================================
 // COPY VALUE
 // ==========================================
 
@@ -667,6 +801,11 @@ document.addEventListener("keydown", (event) => {
     if (event.key.toLowerCase() === "n") {
         addCounter();
     }
+
+    // B = Background picker
+    if (event.key.toLowerCase() === "b") {
+        toggleBgPicker();
+    }
 });
 
 
@@ -698,6 +837,12 @@ copyBtn.addEventListener("click", copyCount);
 loadState();
 
 renderTabs();
+
+renderBgPicker();
+
+// Apply the saved background (defaults to Ocean)
+const savedBg = localStorage.getItem(BG_KEY) || BACKGROUNDS[0].url;
+setHeroImage(savedBg);
 
 updateUI();
 
