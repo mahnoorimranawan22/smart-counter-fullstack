@@ -1216,6 +1216,8 @@ body.dark-mode .tab:hover {
 
 body.dark-mode .tab--active,
 body.dark-mode .tab--active:hover {
+    background: var(--gradient-primary);
+    border-color: transparent;
     color: #042c3c;
 }
 
