@@ -9,8 +9,10 @@ The project demonstrates frontend development, JavaScript fundamentals, REST API
 - ➕ Increase counter
 - ➖ Decrease counter
 - 🔄 Reset counter
+- 🗂️ Multiple counters with tabs
 - ⚙️ Custom counter steps
 - ▶️ Auto-tick mode (1s / 2s / 5s) with pause
+- 🎯 Milestone progress bar (next hundred)
 - 📋 Copy current value
 - 🌙 Dark mode
 - 📜 Counter history
@@ -30,7 +32,20 @@ npm test
 ```
 
 The tests cover the counter core logic: increase/decrease/reset, custom steps,
-negative clamping, history limits, auto-tick, and state persistence.
+negative clamping, history limits, auto-tick, milestone progress, and state
+persistence.
+
+## ⌨️ Keyboard Shortcuts
+
+| Key | Action |
+| --- | --- |
+| `↑` / `↓` | Increase / decrease the active counter |
+| `←` / `→` | Switch between counters |
+| `R` | Reset the active counter |
+| `A` | Toggle auto-tick |
+| `C` | Copy the current value |
+| `N` | Add a new counter |
+| `D` | Toggle dark mode |
 
 ## 🛠️ Technologies Used
 

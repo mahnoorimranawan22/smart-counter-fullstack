@@ -36,9 +36,18 @@
             <h1>🚀 Smart Counter</h1>
 
             <p class="description">
-                Track values with custom steps, auto-tick, dark mode,
-                history, keyboard shortcuts, and local storage.
+                Track multiple counters with custom steps, auto-tick, milestones,
+                dark mode, history, keyboard shortcuts, and local storage.
             </p>
+
+
+            <!-- =====================================
+                 COUNTER TABS
+            ====================================== -->
+
+            <div class="tabs">
+                <div id="tabList" class="tab-list" role="tablist" aria-label="Counters"></div>
+            </div>
 
 
             <!-- =====================================
@@ -64,6 +73,19 @@
                         title="Copy current value">
                         Copy
                     </button>
+
+                </div>
+
+                <div class="milestone">
+
+                    <div class="milestone-header">
+                        <span id="milestone-label" class="milestone-label">0 → 100</span>
+                        <span id="milestone-pct" class="milestone-pct">0%</span>
+                    </div>
+
+                    <div class="milestone-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div id="milestone-bar" class="milestone-bar"></div>
+                    </div>
 
                 </div>
 
@@ -196,6 +218,23 @@
                 </div>
 
             </section>
+
+
+            <!-- =====================================
+                 KEYBOARD SHORTCUTS
+            ====================================== -->
+
+            <div class="shortcut-hints" aria-label="Keyboard shortcuts">
+
+                <span class="shortcut-hint"><kbd>↑</kbd><kbd>↓</kbd> Count</span>
+                <span class="shortcut-hint"><kbd>←</kbd><kbd>→</kbd> Switch</span>
+                <span class="shortcut-hint"><kbd>R</kbd> Reset</span>
+                <span class="shortcut-hint"><kbd>A</kbd> Auto</span>
+                <span class="shortcut-hint"><kbd>C</kbd> Copy</span>
+                <span class="shortcut-hint"><kbd>N</kbd> New</span>
+                <span class="shortcut-hint"><kbd>D</kbd> Dark</span>
+
+            </div>
 
         </div>
 

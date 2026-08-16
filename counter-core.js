@@ -22,7 +22,12 @@
             count: 10,
             step: 1,
             history: [],
-            darkMode: false
+            darkMode: false,
+            label: "Counter",
+            auto: {
+                enabled: false,
+                speedMs: 1000
+            }
         };
 
         if (initial && typeof initial === "object") {
@@ -30,6 +35,15 @@
             if (typeof initial.step === "number" && initial.step > 0) state.step = initial.step;
             if (Array.isArray(initial.history)) state.history = initial.history.slice();
             if (typeof initial.darkMode === "boolean") state.darkMode = initial.darkMode;
+            if (typeof initial.label === "string" && initial.label.trim() !== "") {
+                state.label = initial.label.trim();
+            }
+            if (initial.auto && typeof initial.auto === "object") {
+                if (typeof initial.auto.enabled === "boolean") state.auto.enabled = initial.auto.enabled;
+                if (typeof initial.auto.speedMs === "number" && initial.auto.speedMs > 0) {
+                    state.auto.speedMs = initial.auto.speedMs;
+                }
+            }
         }
 
         function snapshot() {
@@ -37,7 +51,12 @@
                 count: state.count,
                 step: state.step,
                 history: state.history.slice(),
-                darkMode: state.darkMode
+                darkMode: state.darkMode,
+                label: state.label,
+                auto: {
+                    enabled: state.auto.enabled,
+                    speedMs: state.auto.speedMs
+                }
             };
         }
 
@@ -85,6 +104,28 @@
                 return snapshot();
             },
 
+            // Configure auto-tick behaviour
+            setAuto: function (enabled, speedMs) {
+                state.auto.enabled = !!enabled;
+                if (typeof speedMs === "number" && speedMs > 0) {
+                    state.auto.speedMs = speedMs;
+                }
+                return snapshot();
+            },
+
+            // Progress toward the next milestone (default: every 100)
+            milestone: function (divisor) {
+                var d = (typeof divisor === "number" && divisor > 0) ? divisor : 100;
+                var current = Math.floor(state.count / d) * d;
+                var progress = state.count % d;
+                return {
+                    current: current,
+                    next: current + d,
+                    progress: progress,
+                    complete: state.count > 0 && progress === 0
+                };
+            },
+
             toggleDarkMode: function () {
                 state.darkMode = !state.darkMode;
                 addHistory(state.darkMode ? "🌙 Dark mode enabled" : "☀️ Light mode enabled");
@@ -103,6 +144,15 @@
                         }
                     }
                     if (typeof data.darkMode === "boolean") state.darkMode = data.darkMode;
+                    if (typeof data.label === "string" && data.label.trim() !== "") {
+                        state.label = data.label.trim();
+                    }
+                    if (data.auto && typeof data.auto === "object") {
+                        if (typeof data.auto.enabled === "boolean") state.auto.enabled = data.auto.enabled;
+                        if (typeof data.auto.speedMs === "number" && data.auto.speedMs > 0) {
+                            state.auto.speedMs = data.auto.speedMs;
+                        }
+                    }
                 }
                 return snapshot();
             }

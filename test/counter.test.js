@@ -139,3 +139,79 @@ test("snapshots do not share references with internal state", () => {
     assert.equal(s2.count, 10);
     assert.equal(s2.history.length, 0);
 });
+
+test("counters have a default label and auto config", () => {
+    const c = createCounter();
+    const s = c.getState();
+    assert.equal(s.label, "Counter");
+    assert.equal(s.auto.enabled, false);
+    assert.equal(s.auto.speedMs, 1000);
+});
+
+test("createCounter accepts a label and auto config", () => {
+    const c = createCounter({ label: "Steps", auto: { enabled: true, speedMs: 2000 } });
+    const s = c.getState();
+    assert.equal(s.label, "Steps");
+    assert.equal(s.auto.enabled, true);
+    assert.equal(s.auto.speedMs, 2000);
+});
+
+test("setAuto configures auto-tick behaviour", () => {
+    const c = createCounter();
+    c.setAuto(true, 5000);
+    const s = c.getState();
+    assert.equal(s.auto.enabled, true);
+    assert.equal(s.auto.speedMs, 5000);
+
+    c.setAuto(false);
+    assert.equal(c.getState().auto.enabled, false);
+    assert.equal(c.getState().auto.speedMs, 5000);
+
+    // invalid speed is ignored
+    c.setAuto(true, -10);
+    assert.equal(c.getState().auto.speedMs, 5000);
+});
+
+test("milestone reports progress toward the next hundred", () => {
+    const c = createCounter({ count: 10 });
+    const m = c.milestone();
+    assert.equal(m.current, 0);
+    assert.equal(m.next, 100);
+    assert.equal(m.progress, 10);
+    assert.equal(m.complete, false);
+});
+
+test("milestone marks completion on exact multiples", () => {
+    const c = createCounter({ count: 100 });
+    const m = c.milestone();
+    assert.equal(m.current, 100);
+    assert.equal(m.next, 200);
+    assert.equal(m.progress, 0);
+    assert.equal(m.complete, true);
+});
+
+test("milestone at zero is not complete", () => {
+    const c = createCounter({ count: 0 });
+    const m = c.milestone();
+    assert.equal(m.current, 0);
+    assert.equal(m.next, 100);
+    assert.equal(m.complete, false);
+});
+
+test("milestone supports a custom divisor", () => {
+    const c = createCounter({ count: 50 });
+    const m = c.milestone(50);
+    assert.equal(m.current, 50);
+    assert.equal(m.next, 100);
+    assert.equal(m.progress, 0);
+    assert.equal(m.complete, true);
+});
+
+test("load accepts label and auto config", () => {
+    const c = createCounter();
+    c.load({ label: "Reps", auto: { enabled: true, speedMs: 2000 } });
+    const s = c.getState();
+    assert.equal(s.label, "Reps");
+    assert.equal(s.auto.enabled, true);
+    assert.equal(s.auto.speedMs, 2000);
+});
