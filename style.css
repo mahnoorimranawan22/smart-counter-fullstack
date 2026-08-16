@@ -1,24 +1,64 @@
-/* =========================================
-   RESET
-========================================= */
+/* ============================================================
+   SMART COUNTER — "OCEAN TEAL" THEME
+   Deep navy + teal/cyan accents, glassmorphic card,
+   animated aurora background, animations & transitions.
+============================================================ */
 
+/* ------------------------------------------------------------
+   DESIGN TOKENS
+------------------------------------------------------------ */
+:root {
+    --bg-light: #eef6f8;
+    --bg-light-2: #e4f0f3;
+    --bg-deep: #04090f;
+    --bg-midnight: #081322;
+
+    --card-light: rgba(255, 255, 255, 0.82);
+    --panel-bg: rgba(10, 22, 38, 0.72);
+    --panel-solid: #0c1a2c;
+
+    --border-light: rgba(14, 165, 233, 0.16);
+    --border-soft: rgba(126, 172, 212, 0.16);
+    --border-strong: rgba(126, 172, 212, 0.34);
+
+    --accent-sky: #38bdf8;
+    --accent-cyan: #22d3ee;
+    --accent-teal: #14b8a6;
+    --accent-aqua: #2dd4bf;
+
+    --gradient-primary: linear-gradient(135deg, #0ea5e9 0%, #14b8a6 55%, #22d3ee 100%);
+    --gradient-rose: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%);
+    --gradient-amber: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+
+    --text-dark: #0e2a38;
+    --text-dark-muted: #5b7a8c;
+    --text-light: #eaf4f9;
+    --text-muted: #8fb0c6;
+
+    --glow-cyan: rgba(34, 211, 238, 0.35);
+    --glow-teal: rgba(45, 212, 191, 0.35);
+
+    --font-display: "Space Grotesk", "Nunito", sans-serif;
+    --font-mono-display: "Orbitron", "Nunito", monospace;
+
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ------------------------------------------------------------
+   RESET
+------------------------------------------------------------ */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-
-/* =========================================
-   BODY
-========================================= */
-
+/* ------------------------------------------------------------
+   BODY (LIGHT MODE DEFAULT)
+------------------------------------------------------------ */
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Nunito", Arial, Helvetica, sans-serif;
     min-height: 100vh;
-
-    background: #7662d1;
-    color: #24324a;
 
     display: flex;
     justify-content: center;
@@ -26,111 +66,189 @@ body {
 
     padding: 30px;
 
-    transition:
-        background 0.3s ease,
-        color 0.3s ease;
+    background:
+        radial-gradient(900px 600px at 85% -10%, rgba(14, 165, 233, 0.10), transparent 60%),
+        radial-gradient(800px 550px at -10% 110%, rgba(20, 184, 166, 0.10), transparent 60%),
+        linear-gradient(160deg, var(--bg-light), var(--bg-light-2));
+
+    color: var(--text-dark);
+
+    transition: background 0.4s ease, color 0.4s ease;
+    overflow-x: hidden;
 }
 
+/* ------------------------------------------------------------
+   ANIMATED AURORA BACKGROUND
+------------------------------------------------------------ */
+.aurora-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
 
-/* =========================================
+.aurora-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.24;
+    will-change: transform;
+    transition: opacity 0.6s ease;
+}
+
+.aurora-blob--cyan {
+    width: 55vw;
+    height: 55vw;
+    top: -18vw;
+    left: -14vw;
+    background: radial-gradient(circle, rgba(34, 211, 238, 0.35), transparent 70%);
+    animation: aurora-drift-1 26s var(--ease-out) infinite alternate;
+}
+
+.aurora-blob--teal {
+    width: 50vw;
+    height: 50vw;
+    bottom: -24vw;
+    right: -8vw;
+    background: radial-gradient(circle, rgba(20, 184, 166, 0.30), transparent 70%);
+    animation: aurora-drift-2 32s var(--ease-out) infinite alternate;
+}
+
+.aurora-blob--sky {
+    width: 46vw;
+    height: 46vw;
+    top: 32%;
+    left: 46%;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.24), transparent 70%);
+    animation: aurora-drift-3 38s var(--ease-out) infinite alternate;
+}
+
+@keyframes aurora-drift-1 {
+    to { transform: translate3d(17vw, 11vh, 0) scale(1.16); }
+}
+@keyframes aurora-drift-2 {
+    to { transform: translate3d(-13vw, -9vh, 0) scale(1.1); }
+}
+@keyframes aurora-drift-3 {
+    to { transform: translate3d(-15vw, 8vh, 0) scale(1.22); }
+}
+
+/* ------------------------------------------------------------
    MAIN CONTAINER
-========================================= */
-
+------------------------------------------------------------ */
 .container {
+    position: relative;
+    z-index: 1;
     width: 100%;
-    max-width: 550px;
+    max-width: 560px;
 }
 
-
-/* =========================================
+/* ------------------------------------------------------------
    COUNTER CARD
-========================================= */
-
+------------------------------------------------------------ */
 .counter-card {
-    background: #ffffff;
+    background: var(--card-light);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 
     width: 100%;
 
-    padding: 40px 30px;
+    padding: 42px 34px;
 
-    border-radius: 30px;
+    border: 1px solid var(--border-light);
+    border-radius: 26px;
 
-    box-shadow:
-        0 20px 45px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 24px 50px -20px rgba(8, 40, 60, 0.20);
 
     text-align: center;
 
-    transition:
-        background 0.3s ease,
-        color 0.3s ease,
-        box-shadow 0.3s ease;
+    animation: fade-up 0.7s var(--ease-out) backwards;
+
+    transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, transform 0.3s var(--ease-out);
 }
 
+.counter-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-strong);
+    box-shadow: 0 30px 60px -22px rgba(8, 40, 60, 0.28), 0 0 40px -14px var(--glow-cyan);
+}
 
-/* =========================================
+/* ------------------------------------------------------------
    TITLE
-========================================= */
-
+------------------------------------------------------------ */
 h1 {
-    font-size: 32px;
-    margin-bottom: 10px;
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
 
-    color: #24324a;
+    margin-bottom: 8px;
+
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
 }
 
-
-/* =========================================
+/* ------------------------------------------------------------
    DESCRIPTION
-========================================= */
-
+------------------------------------------------------------ */
 .description {
-    color: #71809b;
+    color: var(--text-dark-muted);
 
-    font-size: 17px;
+    font-size: 16px;
     line-height: 1.6;
 
-    margin-bottom: 45px;
+    margin-bottom: 40px;
+
+    transition: color 0.4s ease;
 }
 
-
-/* =========================================
+/* ------------------------------------------------------------
    COUNTER
-========================================= */
-
+------------------------------------------------------------ */
 .counter-section {
-    margin-bottom: 35px;
+    margin-bottom: 34px;
 }
 
 .counter {
-    font-size: 100px;
-
+    font-family: var(--font-mono-display);
+    font-size: 96px;
     font-weight: 700;
+    letter-spacing: 0.02em;
 
     line-height: 1;
 
-    color: #293548;
+    color: var(--text-dark);
 
-    margin-bottom: 15px;
+    margin-bottom: 14px;
+
+    transition: color 0.4s ease, text-shadow 0.4s ease;
 }
 
+.counter.bump {
+    animation: bump 0.3s var(--ease-out);
+}
 
-/* =========================================
+/* ------------------------------------------------------------
    MESSAGE
-========================================= */
-
+------------------------------------------------------------ */
 .message {
-    min-height: 25px;
+    min-height: 24px;
 
-    font-size: 18px;
+    font-size: 15px;
+    font-weight: 600;
 
-    color: #ff3333;
+    color: var(--accent-teal);
+
+    transition: color 0.4s ease;
 }
 
-
-/* =========================================
+/* ------------------------------------------------------------
    STEP SELECTOR
-========================================= */
-
+------------------------------------------------------------ */
 .step-container {
     display: flex;
 
@@ -139,38 +257,45 @@ h1 {
 
     gap: 12px;
 
-    margin-bottom: 20px;
+    margin-bottom: 22px;
 }
 
 .step-container label {
-    font-size: 18px;
+    font-size: 16px;
+    font-weight: 700;
 
-    font-weight: 600;
+    transition: color 0.4s ease;
 }
 
 #step {
-    padding: 12px 18px;
+    padding: 11px 16px;
 
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: 600;
 
-    border: 1px solid #dce2ec;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
 
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.9);
 
-    background: white;
-
-    color: #24324a;
+    color: var(--text-dark);
 
     cursor: pointer;
 
     outline: none;
+
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.4s ease, color 0.4s ease;
 }
 
+#step:hover,
+#step:focus {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
+}
 
-/* =========================================
+/* ------------------------------------------------------------
    BUTTON CONTAINER
-========================================= */
-
+------------------------------------------------------------ */
 .buttons {
     display: flex;
 
@@ -179,267 +304,318 @@ h1 {
     margin-bottom: 20px;
 }
 
-
-/* =========================================
+/* ------------------------------------------------------------
    GENERAL BUTTON
-========================================= */
-
+------------------------------------------------------------ */
 button {
     border: none;
 
-    font-size: 18px;
-
-    font-weight: 600;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
 
     cursor: pointer;
 
-    border-radius: 16px;
+    border-radius: 14px;
 
-    padding: 17px 20px;
+    padding: 16px 20px;
 
-    transition:
-        transform 0.2s ease,
-        opacity 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: transform 0.2s var(--ease-out), box-shadow 0.25s ease, filter 0.2s ease, background 0.3s ease;
 }
 
 button:hover {
     transform: translateY(-2px);
-
-    box-shadow:
-        0 7px 15px rgba(0, 0, 0, 0.12);
 }
 
 button:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(0.96);
 }
 
+button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
 
-/* =========================================
+/* ------------------------------------------------------------
    DECREASE BUTTON
-========================================= */
-
+------------------------------------------------------------ */
 .decrease-btn {
     flex: 1;
 
-    background: #ed5367;
+    background-image: var(--gradient-rose);
+    color: #ffffff;
 
-    color: white;
+    box-shadow: 0 8px 20px -8px rgba(244, 63, 94, 0.5);
 }
 
+.decrease-btn:hover {
+    box-shadow: 0 10px 24px -8px rgba(244, 63, 94, 0.6), 0 0 18px -4px rgba(244, 63, 94, 0.35);
+}
 
-/* =========================================
+/* ------------------------------------------------------------
    RESET BUTTON
-========================================= */
-
+------------------------------------------------------------ */
 .reset-btn {
     flex: 1;
 
-    background: #ffa500;
+    background-image: var(--gradient-amber);
+    color: #ffffff;
 
-    color: white;
+    box-shadow: 0 8px 20px -8px rgba(245, 158, 11, 0.5);
 }
 
+.reset-btn:hover {
+    box-shadow: 0 10px 24px -8px rgba(245, 158, 11, 0.6), 0 0 18px -4px rgba(245, 158, 11, 0.35);
+}
 
-/* =========================================
+/* ------------------------------------------------------------
    INCREASE BUTTON
-========================================= */
-
+------------------------------------------------------------ */
 .increase-btn {
     flex: 1;
 
-    background: #28cf76;
+    background-image: var(--gradient-primary);
+    color: #042c3c;
 
-    color: white;
+    box-shadow: 0 8px 20px -8px var(--glow-cyan);
 }
 
+.increase-btn:hover {
+    box-shadow: 0 10px 24px -8px var(--glow-cyan), 0 0 18px -4px rgba(34, 211, 238, 0.4);
+}
 
-/* =========================================
+/* ------------------------------------------------------------
    DARK MODE BUTTON
-========================================= */
-
+------------------------------------------------------------ */
 .dark-mode-btn {
     width: 100%;
 
-    background: #303746;
+    background: rgba(8, 19, 34, 0.9);
+    color: var(--text-light);
 
-    color: white;
+    margin-bottom: 24px;
 
-    margin-bottom: 25px;
+    box-shadow: 0 8px 20px -10px rgba(8, 19, 34, 0.5);
 }
 
+.dark-mode-btn:hover {
+    background: #0b2136;
+    box-shadow: 0 10px 24px -10px rgba(8, 19, 34, 0.6), 0 0 16px -6px var(--glow-cyan);
+}
 
-/* =========================================
+/* ------------------------------------------------------------
    HISTORY SECTION
-========================================= */
-
+------------------------------------------------------------ */
 .history-section {
-    border-top: 1px solid #e1e5ec;
+    border-top: 1px solid var(--border-light);
 
-    padding-top: 25px;
+    padding-top: 22px;
+
+    transition: border-color 0.4s ease;
 }
 
 .history-section h3 {
-    font-size: 21px;
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 600;
 
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 
-    color: #24324a;
+    transition: color 0.4s ease;
 }
 
-
-/* =========================================
+/* ------------------------------------------------------------
    HISTORY
-========================================= */
-
+------------------------------------------------------------ */
 #history {
-    max-height: 220px;
+    max-height: 210px;
 
     overflow-y: auto;
 
     text-align: left;
 }
 
-
-/* =========================================
-   EMPTY HISTORY
-========================================= */
-
 .empty-history {
     text-align: center;
 
-    color: #8793a8;
+    color: var(--text-dark-muted);
 
     font-style: italic;
 
-    padding: 10px;
+    padding: 12px;
+
+    transition: color 0.4s ease;
 }
-
-
-/* =========================================
-   HISTORY ITEMS
-========================================= */
 
 .history-item {
     display: flex;
 
     justify-content: space-between;
-
     align-items: center;
 
     padding: 10px 12px;
 
     margin-bottom: 8px;
 
-    border-radius: 10px;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
 
-    background: #f4f6fa;
+    background: rgba(14, 165, 233, 0.06);
 
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 600;
+
+    transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
 
+.history-item:hover {
+    background: rgba(34, 211, 238, 0.10);
+    transform: translateX(3px);
+}
 
-/* =========================================
+.history-item-new {
+    animation: slide-in 0.35s var(--ease-out);
+}
+
+/* ------------------------------------------------------------
    DARK MODE
-========================================= */
-
+------------------------------------------------------------ */
 body.dark-mode {
-    background: #171923;
+    background:
+        radial-gradient(1100px 750px at 85% -10%, rgba(14, 165, 233, 0.10), transparent 60%),
+        radial-gradient(950px 700px at -10% 115%, rgba(20, 184, 166, 0.10), transparent 60%),
+        var(--bg-deep);
 
-    color: #ffffff;
+    color: var(--text-light);
+}
+
+body.dark-mode .aurora-blob {
+    opacity: 0.55;
 }
 
 body.dark-mode .counter-card {
-    background: #252936;
-
-    color: #ffffff;
-
-    box-shadow:
-        0 20px 45px rgba(0, 0, 0, 0.35);
+    background: var(--panel-bg);
+    border-color: var(--border-soft);
+    box-shadow: 0 26px 55px -22px rgba(0, 0, 0, 0.85), 0 0 40px -14px var(--glow-cyan);
 }
 
-body.dark-mode h1 {
-    color: #ffffff;
+body.dark-mode .counter-card:hover {
+    border-color: var(--border-strong);
+    box-shadow: 0 30px 60px -22px rgba(0, 0, 0, 0.9), 0 0 46px -10px var(--glow-cyan);
 }
 
 body.dark-mode .description {
-    color: #aeb7ca;
+    color: var(--text-muted);
 }
 
 body.dark-mode .counter {
-    color: #ffffff;
+    color: var(--text-light);
+    text-shadow: 0 0 22px rgba(34, 211, 238, 0.35);
+}
+
+body.dark-mode .message {
+    color: var(--accent-cyan);
 }
 
 body.dark-mode .step-container label {
-    color: #ffffff;
+    color: var(--text-light);
 }
 
 body.dark-mode #step {
-    background: #303442;
+    background: var(--bg-midnight);
+    color: var(--text-light);
+    border-color: var(--border-soft);
+}
 
-    color: white;
+body.dark-mode #step:hover,
+body.dark-mode #step:focus {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.18);
+}
 
-    border-color: #4b5265;
+body.dark-mode .dark-mode-btn {
+    background: rgba(16, 36, 60, 0.7);
+    border: 1px solid var(--border-soft);
+}
+
+body.dark-mode .dark-mode-btn:hover {
+    background: rgba(16, 36, 60, 1);
 }
 
 body.dark-mode .history-section {
-    border-top-color: #414657;
+    border-top-color: var(--border-soft);
 }
 
 body.dark-mode .history-section h3 {
-    color: #ffffff;
+    color: var(--text-light);
 }
 
 body.dark-mode .empty-history {
-    color: #aeb7ca;
+    color: var(--text-muted);
 }
 
 body.dark-mode .history-item {
-    background: #303442;
-
-    color: white;
+    background: rgba(16, 36, 60, 0.5);
+    border-color: var(--border-soft);
+    color: var(--text-light);
 }
 
+body.dark-mode .history-item:hover {
+    background: rgba(34, 211, 238, 0.09);
+}
 
-/* =========================================
+/* ------------------------------------------------------------
    SCROLLBAR
-========================================= */
-
+------------------------------------------------------------ */
 #history::-webkit-scrollbar {
     width: 7px;
 }
 
 #history::-webkit-scrollbar-thumb {
-    background: #a5aec0;
-
+    background: linear-gradient(180deg, var(--accent-cyan), var(--accent-teal));
     border-radius: 10px;
 }
 
+/* ------------------------------------------------------------
+   ANIMATIONS
+------------------------------------------------------------ */
+@keyframes fade-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
 
-/* =========================================
+@keyframes slide-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bump {
+    0%, 100% { transform: scale(1); }
+    40%      { transform: scale(1.12); }
+}
+
+/* ------------------------------------------------------------
    TABLET
-========================================= */
-
+------------------------------------------------------------ */
 @media (max-width: 600px) {
-
     body {
         padding: 15px;
     }
 
     .counter-card {
         padding: 30px 20px;
-
-        border-radius: 24px;
+        border-radius: 22px;
     }
 
     h1 {
-        font-size: 28px;
+        font-size: 26px;
     }
 
     .description {
         font-size: 15px;
-
-        margin-bottom: 35px;
+        margin-bottom: 34px;
     }
 
     .counter {
@@ -452,18 +628,14 @@ body.dark-mode .history-item {
 
     button {
         font-size: 15px;
-
         padding: 15px 10px;
     }
 }
 
-
-/* =========================================
+/* ------------------------------------------------------------
    MOBILE
-========================================= */
-
+------------------------------------------------------------ */
 @media (max-width: 400px) {
-
     body {
         padding: 10px;
     }
@@ -473,7 +645,7 @@ body.dark-mode .history-item {
     }
 
     h1 {
-        font-size: 24px;
+        font-size: 23px;
     }
 
     .description {
@@ -486,7 +658,6 @@ body.dark-mode .history-item {
 
     .step-container {
         flex-direction: column;
-
         gap: 8px;
     }
 
@@ -496,5 +667,24 @@ body.dark-mode .history-item {
 
     button {
         width: 100%;
+    }
+}
+
+/* ------------------------------------------------------------
+   REDUCED MOTION
+------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+    .aurora-blob,
+    .counter-card,
+    .history-item-new,
+    .counter.bump {
+        animation: none !important;
+    }
+
+    .counter-card,
+    button,
+    .history-item {
+        transition: none !important;
+        transform: none !important;
     }
 }

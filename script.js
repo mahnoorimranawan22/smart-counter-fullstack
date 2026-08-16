@@ -26,12 +26,57 @@ const darkModeBtn = document.getElementById("darkMode");
 
 
 // ==========================================
+// COUNTER ROLL ANIMATION
+// ==========================================
+
+let displayCount = null;
+let countRaf = null;
+
+function animateCountTo(target) {
+
+    if (countRaf) {
+        cancelAnimationFrame(countRaf);
+        countRaf = null;
+    }
+
+    const from = (displayCount === null) ? 0 : displayCount;
+
+    if (from === target) {
+        counterDisplay.textContent = target;
+        displayCount = target;
+        return;
+    }
+
+    // Longer rolls for bigger jumps, capped for snappiness
+    const duration = Math.min(700, 250 + Math.abs(target - from) * 25);
+    const startTime = performance.now();
+
+    function frame(now) {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+        counterDisplay.textContent = Math.round(from + (target - from) * eased);
+
+        if (progress < 1) {
+            countRaf = requestAnimationFrame(frame);
+        } else {
+            counterDisplay.textContent = target;
+            displayCount = target;
+            countRaf = null;
+        }
+    }
+
+    countRaf = requestAnimationFrame(frame);
+}
+
+
+// ==========================================
 // UPDATE UI
 // ==========================================
 
 function updateUI() {
 
-    counterDisplay.textContent = state.count;
+    // Roll the displayed number to the new value (counts up on load)
+    animateCountTo(state.count);
 
     // Counter message
     if (state.count === 0) {
@@ -81,7 +126,7 @@ function updateHistory() {
     }
 
     historyList.innerHTML = state.history
-        .map(item => `<p>${item}</p>`)
+        .map(item => `<p class="history-item">${item}</p>`)
         .join("");
 }
 
@@ -101,6 +146,24 @@ function addHistory(action) {
 
     saveState();
     updateHistory();
+
+    // Slide-in highlight for the newest entry
+    const firstItem = historyList.firstElementChild;
+    if (firstItem) {
+        firstItem.classList.add("history-item-new");
+    }
+}
+
+
+// ==========================================
+// BUMP COUNTER ANIMATION
+// ==========================================
+
+function bumpCounter() {
+
+    counterDisplay.classList.remove("bump");
+    void counterDisplay.offsetWidth;
+    counterDisplay.classList.add("bump");
 }
 
 
@@ -115,6 +178,7 @@ async function increase() {
     addHistory(`➕ Increased by ${state.step} → ${state.count}`);
 
     updateUI();
+    bumpCounter();
     saveState();
 
 
@@ -169,6 +233,7 @@ async function decrease() {
     addHistory(`➖ Decreased by ${state.step} → ${state.count}`);
 
     updateUI();
+    bumpCounter();
     saveState();
 
 
@@ -214,6 +279,7 @@ async function resetCounter() {
     addHistory("🔄 Counter reset → 0");
 
     updateUI();
+    bumpCounter();
     saveState();
 
 
